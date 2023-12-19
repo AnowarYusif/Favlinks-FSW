@@ -26,10 +26,22 @@ const getLinks = async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   };
+  const updateLink = async (req, res) => {
+    const { id } = req.params;
+    const { name, url } = req.body;
+    try {
+      const result = await pool.query('UPDATE favlinks SET name = $1, url = $2 WHERE id = $3 RETURNING *', [name, url, id]);
+      res.status(200).json(result.rows[0]);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
   
   
   module.exports = {
     getLinks,
     createLink,
+    updateLink,
   };
   
