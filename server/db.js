@@ -37,11 +37,22 @@ const getLinks = async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   };
+  const deleteLink = async (req, res) => {
+    const { id } = req.params;
+    try {
+      const result = await pool.query('DELETE FROM favlinks WHERE id = $1 RETURNING *', [id]);
+      res.status(200).json(result.rows[0]);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
   
   
   module.exports = {
     getLinks,
     createLink,
     updateLink,
+    deleteLink
   };
   
